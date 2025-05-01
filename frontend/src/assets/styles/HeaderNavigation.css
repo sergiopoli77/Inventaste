@@ -1,97 +1,153 @@
-@font-face{
-    font-family: 'CircularStd';
-    src: url('../fonts/CircularStd-Medium.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+/* HeaderNavigation.css */
+.header-navigation {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  padding: 0;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.header-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'CircularStd', sans-serif;
-    background-color: #A0C878;
-    color: #FAF6E9;
-    padding: 10px 20px;
-  }
-  
-  .nav-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .nav-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-link {
-    color: #FAF6E9;
-    text-decoration: none;
-    margin: 30px;
-    margin-left: 40px;
-    margin-right: 40px;
-    font-family: 'CircularStd', sans-serif;
-    font-size: 18px;
-  }
-  
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropbtn {
-    font-family: 'CircularStd', sans-serif;
-    font-size: 18px;
-    background-color: #A0C878;
-    color: #FAF6E9;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-  }
-  
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #FAF6E9;
-    color: black;
-    min-width: 180px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-  }
-  
-  .dropdown-content a {
-    color: black;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: #DDEB9D;
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .nav-right {
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
 
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-name {
-    font-family: 'CircularStd', sans-serif;
-    font-size: 15px;
-    margin-right: 20px;
-  }
-  
-  .logout-btn {
-    margin: 30px;
-    background: none;
-    border: none;
-    color: #FAF6E9;
-    cursor: pointer;
-  }
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 600;
+  padding: 16px 24px 16px 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-color);
+  text-decoration: none;
+  padding: 20px 24px;
+  font-weight: 500;
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+  margin-right: 6px;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  color: var(--accent-color);
+  border: none;
+  padding: 20px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: var(--transition);
+}
+
+.dropbtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  margin-left: 4px;
+  transition: var(--transition);
+}
+
+.dropdown[aria-expanded="true"] .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 220px;
+  box-shadow: var(--shadow);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content a {
+  color: var(--dark-text);
+  padding: 14px 20px;
+  text-decoration: none;
+  display: block;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.dropdown-content a:hover {
+  background-color: #f5f7fa;
+  color: var(--primary-color);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-icon {
+  color: var(--accent-color);
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--accent-color);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}

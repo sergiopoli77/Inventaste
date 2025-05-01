@@ -1,0 +1,50 @@
+/* App.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #2c6e49;
+  --secondary-color: #4c956c;
+  --accent-color: #fefee3;
+  --light-background: #f8f9fa;
+  --dark-text: #2c363f;
+  --light-text: #ffffff;
+  --gray-text: #6c757d;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  color: var(--dark-text);
+  line-height: 1.6;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 0;
+  background-color: #f5f7fa;
+}
+
+.app-footer {
+  padding: 16px;
+  text-align: center;
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  font-size: 14px;
+}
+
+
