@@ -1,0 +1,267 @@
+/* Dashboard.css */
+.dashboard-page {
+  padding: 30px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-button {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  color: var(--dark-text);
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.action-button:hover {
+  background-color: #f5f5f5;
+}
+
+.action-button.primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.action-button.primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: var(--transition);
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+.summary-card.total .card-icon {
+  background-color: rgba(44, 110, 73, 0.1);
+  color: var(--primary-color);
+}
+
+.summary-card.kitchen .card-icon {
+  background-color: rgba(255, 159, 67, 0.1);
+  color: #ff9f43;
+}
+
+.summary-card.service .card-icon {
+  background-color: rgba(54, 162, 235, 0.1);
+  color: #36a2eb;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-content h2 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-text);
+  margin-bottom: 8px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: 4px;
+}
+
+.card-trend {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.card-trend.positive {
+  color: #28a745;
+}
+
+.card-trend.negative {
+  color: #dc3545;
+}
+
+.dashboard-widgets {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.widget-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.widget {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.widget-header {
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.widget-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dark-text);
+}
+
+.widget-content {
+  padding: 20px;
+}
+
+.alert-item, .activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.alert-item:last-child, .activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.alert-item:first-child, .activity-item:first-child {
+  padding-top: 0;
+}
+
+.alert-text, .activity-text {
+  font-size: 14px;
+  color: var(--dark-text);
+}
+
+.alert-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.alert-badge.critical {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.alert-badge.warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: var(--gray-text);
+}
+
+.performance {
+  grid-column: 1 / -1;
+}
+
+.chart-placeholder {
+  height: 180px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.chart-info {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.chart-stat {
+  text-align: center;
+}
+
+.chart-stat h4 {
+  font-size: 14px;
+  color: var(--gray-text);
+  margin-bottom: 8px;
+}
+
+.chart-stat p {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .dashboard-actions {
+    width: 100%;
+  }
+  
+  .action-button {
+    flex: 1;
+  }
+  
+  .dashboard-page {
+    padding: 20px;
+  }
+}
