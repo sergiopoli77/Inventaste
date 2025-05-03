@@ -1,35 +1,39 @@
-//Layer controller untuk handle req dan res
-// Validasi body
-
+// Controller untuk handle request dan response
 const express = require("express");
 const router = express.Router();
-const { getUserById, getAllUsers } = require("./user.service");
+const { getEmployeeById, getAllEmployees } = require("./employee.service");
 
-/* GET users listing. */
-router.get("/users", async (req, res, next) => {
+// GET semua employee
+router.get("/employees", async (req, res) => {
   try {
-    const users = await getAllUsers();
+    const employees = await getAllEmployees();
     res.json({
-      status: "success!!!",
-      message: "list users",
-      data: users,
+      status: "success",
+      message: "List of employees",
+      data: employees,
     });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
-router.get("/users/:id", async (req, res, next) => {
+// GET employee by ID
+router.get("/employees/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const users = await getUserById(id);
+    const employee = await getEmployeeById(id);
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
     res.json({
       status: "success",
-      message: "list users",
-      data: users,
+      message: "Employee data",
+      data: employee,
     });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ message: error.message });
   }
 });
 
