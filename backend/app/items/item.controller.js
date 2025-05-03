@@ -1,79 +1,82 @@
 const express = require("express");
-const router = express.Router();
 const itemService = require("./item.service");
 
-// Endpoint untuk mendapatkan semua item
+const router = express.Router();
+
+// GET /items - Mengambil semua item
 router.get("/items", async (req, res) => {
   try {
-    const items = await itemService.getAllItems();
-    res.json({
-      status: "success",
-      message: "List of items",
-      data: items,
-    });
+    const items = await itemService.getItems();
+    res.status(200).json(items);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// Endpoint untuk mendapatkan item berdasarkan ID
+// GET /items/:id - Mengambil item berdasarkan ID
 router.get("/items/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const id = req.params.id;
-    const item = await itemService.getItemById(id);
-    res.json({
-      status: "success",
-      message: "Item found",
-      data: item,
-    });
+    const item = await itemService.getItem(id);
+    if (!item) {
+      return res.status(404).json({ message: "Item tidak ditemukan" });
+    }
+    res.status(200).json(item);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// Endpoint untuk menambah item baru
+// POST /items - Menambahkan item baru
 router.post("/items", async (req, res) => {
+  const { name, stock, status, id_kategori, createdBy, updateBy } = req.body;
   try {
-    const itemData = req.body;
-    const newItem = await itemService.addItem(itemData);
-    res.status(201).json({
-      status: "success",
-      message: "Item created",
-      data: newItem,
+    const newItem = await itemService.addItem({
+      name,
+      stock,
+      status,
+      id_kategori,
+      createdBy,
+      updateBy
     });
+    res.status(201).json(newItem);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// Endpoint untuk mengupdate item
+// PUT /items/:id - Mengupdate item berdasarkan ID
 router.put("/items/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, stock, status, id_kategori, updateBy } = req.body;
   try {
-    const id = req.params.id;
-    const itemData = req.body;
-    const updatedItem = await itemService.updateItem(id, itemData);
-    res.json({
-      status: "success",
-      message: "Item updated",
-      data: updatedItem,
+    const updatedItem = await itemService.modifyItem(id, {
+      name,
+      stock,
+      status,
+      id_kategori,
+      updateBy
     });
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Item tidak ditemukan" });
+    }
+    res.status(200).json(updatedItem);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// Endpoint untuk menghapus item
+// DELETE /items/:id - Menghapus item berdasarkan ID
 router.delete("/items/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const id = req.params.id;
-    const deletedItem = await itemService.deleteItem(id);
-    res.json({
-      status: "success",
-      message: "Item deleted",
-      data: deletedItem,
-    });
+    const deletedItem = await itemService.removeItem(id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: "Item tidak ditemukan" });
+    }
+    res.status(200).json({ message: "Item berhasil dihapus" });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
