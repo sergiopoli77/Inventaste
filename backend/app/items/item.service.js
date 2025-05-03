@@ -1,46 +1,29 @@
 const itemRepository = require("./item.repository");
 
-// Fungsi untuk mendapatkan semua item
-const getAllItems = async () => {
-  return await itemRepository.findAll();
+const getItems = async () => {
+  return await itemRepository.getAllItems();
 };
 
-// Fungsi untuk mendapatkan item berdasarkan ID
-const getItemById = async (id) => {
-  const item = await itemRepository.findById(id);
-  if (!item) {
-    throw new Error("Item tidak ditemukan");
-  }
-  return item;
+const getItem = async (id) => {
+  return await itemRepository.getItemById(id);
 };
 
-// Fungsi untuk menambah item baru
 const addItem = async (itemData) => {
-  return await itemRepository.create(itemData);
+  return await itemRepository.createItem(itemData);
 };
 
-// Fungsi untuk mengupdate item
-const updateItem = async (id, itemData) => {
-  const item = await itemRepository.updateById(id, itemData);
-  if (!item) {
-    throw new Error("Item tidak ditemukan");
-  }
-  return item;
+const modifyItem = async (id, itemData) => {
+  return await itemRepository.updateItem(id, itemData);
 };
 
-// Fungsi untuk menghapus item
-const deleteItem = async (id) => {
-  const item = await itemRepository.deleteById(id);
-  if (!item) {
-    throw new Error("Item tidak ditemukan");
-  }
-  return item;
+const removeItem = async (id) => {
+  return await itemRepository.deleteItem(id);
 };
 
 module.exports = {
-  getAllItems,
-  getItemById,
+  getItems,
+  getItem,
   addItem,
-  updateItem,
-  deleteItem,
+  modifyItem,
+  removeItem
 };
