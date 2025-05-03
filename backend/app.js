@@ -5,7 +5,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const { mongoUrl } = require("./config"); // Mengimpor mongoUrl dari config
 const employeeController = require("./app/employees/employee.controller");
-const itemController = require("./app/items/item.controller"); // Tambahkan ini
+const itemController = require("./app/items/item.controller");
 
 const app = express();
 
@@ -23,13 +23,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Gunakan employee controller untuk API employee
-app.use("/api/employees", employeeController);
+app.use("/api", employeeController);
 
-// Gunakan item controller untuk API items
-app.use("/api/items", itemController); // Tambahkan ini
+// Gunakan employee controller untuk API item
+app.use("/api", itemController);
 
-// Koneksi ke MongoDB (tanpa opsi deprecated)
-mongoose.connect(mongoUrl)
+// Koneksi ke MongoDB
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.log("Error connecting to MongoDB:", error));
 

@@ -1,33 +1,42 @@
 const express = require("express");
+const router = express.Router();
 const itemService = require("./item.service");
 
-const router = express.Router();
-
-// GET /items - Mengambil semua item
+// GET semua item
 router.get("/items", async (req, res) => {
   try {
     const items = await itemService.getItems();
-    res.status(200).json(items);
+    res.json({
+      status: "success",
+      message: "List of items",
+      data: items,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
-// GET /items/:id - Mengambil item berdasarkan ID
+// GET item by ID
 router.get("/items/:id", async (req, res) => {
-  const { id } = req.params;
   try {
+    const id = req.params.id;
     const item = await itemService.getItem(id);
+
     if (!item) {
       return res.status(404).json({ message: "Item tidak ditemukan" });
     }
-    res.status(200).json(item);
+
+    res.json({
+      status: "success",
+      message: "Item data",
+      data: item,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
-// POST /items - Menambahkan item baru
+// POST item baru
 router.post("/items", async (req, res) => {
   const { name, stock, status, id_kategori, createdBy, updateBy } = req.body;
   try {
@@ -37,15 +46,20 @@ router.post("/items", async (req, res) => {
       status,
       id_kategori,
       createdBy,
-      updateBy
+      updateBy,
     });
-    res.status(201).json(newItem);
+
+    res.status(201).json({
+      status: "success",
+      message: "Item berhasil ditambahkan",
+      data: newItem,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
-// PUT /items/:id - Mengupdate item berdasarkan ID
+// PUT update item
 router.put("/items/:id", async (req, res) => {
   const { id } = req.params;
   const { name, stock, status, id_kategori, updateBy } = req.body;
@@ -55,28 +69,39 @@ router.put("/items/:id", async (req, res) => {
       stock,
       status,
       id_kategori,
-      updateBy
+      updateBy,
     });
+
     if (!updatedItem) {
       return res.status(404).json({ message: "Item tidak ditemukan" });
     }
-    res.status(200).json(updatedItem);
+
+    res.json({
+      status: "success",
+      message: "Item berhasil diupdate",
+      data: updatedItem,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
-// DELETE /items/:id - Menghapus item berdasarkan ID
+// DELETE item
 router.delete("/items/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const deletedItem = await itemService.removeItem(id);
+
     if (!deletedItem) {
       return res.status(404).json({ message: "Item tidak ditemukan" });
     }
-    res.status(200).json({ message: "Item berhasil dihapus" });
+
+    res.json({
+      status: "success",
+      message: "Item berhasil dihapus",
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
