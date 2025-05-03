@@ -1,22 +1,21 @@
-//Layer service adalah layer untuk handle
-//Bussiness logic
+// Layer service untuk menangani logika bisnis terkait karyawan
 
-const { findAll, findById } = require("./user.repository");
+const { findAllEmployees, findEmployeeById } = require("./employee.repository");
 
-const getAllUsers = async () => {
-  const users = await findAll();
-  return users;
+const getAllEmployees = async () => {
+  const employees = await findAllEmployees();
+  return employees;
 };
 
-const getUserById = async (id) => {
-  const users = await findById(id);
-  if (!users) {
-    throw Error("User tidak ditemukan");
+const getEmployeeById = async (id) => {
+  const employee = await findEmployeeById(id);
+  if (!employee) {
+    throw Error("Karyawan tidak ditemukan");
   }
-  return users;
+  return employee;
 };
 
 module.exports = {
-  getAllUsers,
-  getUserById,
+  getAllEmployees,
+  getEmployeeById,
 };

@@ -1,19 +1,38 @@
 const mongoose = require("mongoose");
 
-//Buat Schema
-const userSchema = mongoose.Schema(
+// Membuat Schema untuk Employee
+const employeeSchema = mongoose.Schema(
   {
-    name: { type: String, required: true },
-    age: Number,
-    status: String,
+    username: { 
+      type: String, 
+      required: true, 
+      unique: true // Pastikan username unik
+    },
+    password: { 
+      type: String, 
+      required: true 
+    },
+    role: { 
+      type: String, 
+      enum: ["staff", "admin"], // Hanya bisa staff atau admin
+      default: "staff" // Default role adalah staff
+    },
+    photoUrl: { 
+      type: String, 
+      required: false 
+    },
+    checkInTime: { 
+      type: Date, 
+      required: false 
+    },
   },
   {
-    versionKey: false,
-    timestamps: true,
+    versionKey: false, // Tidak menambahkan __v ke setiap dokumen
+    timestamps: true,  // Menambahkan createdAt dan updatedAt
   }
 );
 
-//Buat Model
-const User = mongoose.model("User", userSchema);
+// Membuat Model untuk Employee
+const Employee = mongoose.model("Employee", employeeSchema);
 
-module.exports = User;
+module.exports = Employee;
