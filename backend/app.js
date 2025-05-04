@@ -23,14 +23,18 @@ app.use(cookieParser());
 // Middleware untuk file statis (jika ada)
 app.use(express.static(path.join(__dirname, "public")));
 
-// Gunakan employee controller untuk API employee
-app.use("/api", employeeController);
+// Gunakan category controller untuk API kategori
+app.use("/api", categoryController); // Menambahkan route untuk category
 
 // Gunakan item controller untuk API item
 app.use("/api", itemController);
 
-// Gunakan category controller untuk API kategori
-app.use("/api", categoryController); // Menambahkan route untuk category
+
+// Gunakan employee controller untuk API employee
+app.use("/api", employeeController);
+
+
+
 
 // Koneksi ke MongoDB
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
