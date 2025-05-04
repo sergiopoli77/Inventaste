@@ -4,19 +4,13 @@ const { login } = require("./auth.service");
 const jwt = require("jsonwebtoken");
 const Employee = require("../employees/employee.model");
 
-// Endpoint login
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
   try {
-    const token = await login(username, password);
-    res.json({
-      status: "success",
-      message: "Login berhasil",
-      token: token,
-    });
+    const { email, password } = req.body;
+    const { token, user } = await login(email, password);
+    res.json({ token, user });
   } catch (error) {
-    res.status(401).json({ status: "fail", message: error.message });
+    res.status(401).json({ message: error.message });
   }
 });
 

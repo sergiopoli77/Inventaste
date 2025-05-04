@@ -1,28 +1,31 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const Employee = require("../employees/employee.model");
+const { JWT_SECRET, JWT_EXPIRES_IN } = require("../../config");
 
-require("dotenv").config();
+// Fungsi login dan pembuatan token
+const login = async (email, password) => {
+  const user = await Employee.findOne({ email });
+  
+  // Jika user tidak ditemukan
+  if (!user) throw new Error("Email tidak ditemukan");
 
-const login = async (username, password) => {
-  const user = await Employee.findOne({ username });
+  // Validasi password yang dimasukkan
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new Error("Password salah");
 
-  if (!user) {
-    throw new Error("Username tidak ditemukan");
-  }
-
-  if (password !== user.password) {
-    throw new Error("Password salah");
-  }
-
+  // Membuat token JWT dengan role dan data user lainnya
   const token = jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET || "secretkey",
-    { expiresIn: "1d" }
+    { 
+      id: user._id,      // ID pengguna
+      role: user.role,   // Role pengguna (admin/staff)
+      name: user.name    // Nama pengguna (untuk informasi pengguna)
+    },
+    JWT_SECRET,           // Secret key untuk sign token
+    { expiresIn: JWT_EXPIRES_IN }  // Waktu kadaluarsa token
   );
 
-  return token;
+  return { token, user };  // Mengembalikan token dan data user
 };
 
-module.exports = {
-  login,
-};
+module.exports = { login };
