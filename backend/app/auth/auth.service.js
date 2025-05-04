@@ -1,28 +1,22 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const Employee = require("../employees/employee.model");
+const { JWT_SECRET, JWT_EXPIRES_IN } = require("../../config");
 
-require("dotenv").config();
+const login = async (email, password) => {
+  const user = await Employee.findOne({ email });
+  if (!user) throw new Error("Email tidak ditemukan");
 
-const login = async (username, password) => {
-  const user = await Employee.findOne({ username });
-
-  if (!user) {
-    throw new Error("Username tidak ditemukan");
-  }
-
-  if (password !== user.password) {
-    throw new Error("Password salah");
-  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new Error("Password salah");
 
   const token = jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET || "secretkey",
-    { expiresIn: "1d" }
+    { id: user._id, role: user.role, name: user.name },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
   );
 
-  return token;
+  return { token, user };
 };
 
-module.exports = {
-  login,
-};
+module.exports = { login };
