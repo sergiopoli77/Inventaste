@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
 import '../../assets/styles/HeaderNavigation.css';
 import { FaSignOutAlt, FaChartBar, FaWarehouse, FaUserCircle } from "react-icons/fa";
+import { logout } from "../../utils/auth";
 
 const HeaderNavigation = ({ userName, onLogout }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -46,7 +47,7 @@ const HeaderNavigation = ({ userName, onLogout }) => {
             <FaUserCircle size={22} className="user-icon" />
             <span className="user-name">Hi, {userName}</span>
           </div>
-          <button className="logout-btn" onClick={onLogout} aria-label="Logout">
+          <button className="logout-btn" onClick={logout} aria-label="Logout">
             <FaSignOutAlt size={18} />
             <span>Logout</span>
           </button>
