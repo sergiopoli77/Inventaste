@@ -9,6 +9,15 @@ const findAllCategories = async () => {
   }
 };
 
+const findCategoryByName = async (name) => {
+  try {
+    const category = await Category.findOne({ name: new RegExp(name, 'i') }); // Case insensitive search
+    return category;
+  } catch (error) {
+    throw new Error("Error finding category: " + error.message);
+  }
+};
+
 module.exports = {
-  findAllCategories,
+  findAllCategories, findCategoryByName
 };
