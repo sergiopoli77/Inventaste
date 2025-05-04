@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Membuat Schema untuk Category
+// Schema untuk Category
 const categorySchema = mongoose.Schema(
   {
     id_kategori: {
@@ -23,7 +23,7 @@ const categorySchema = mongoose.Schema(
   }
 );
 
-// Membuat Model untuk Category
+// Model untuk Category
 const Category = mongoose.model("Category", categorySchema);
 
 module.exports = Category;
