@@ -7,8 +7,15 @@ const { mongoUrl } = require("./config"); // Mengimpor mongoUrl dari config
 const employeeController = require("./app/employees/employee.controller");
 const itemController = require("./app/items/item.controller");
 const categoryController = require("./app/categories/category.controller"); // Mengimpor category controller
+const authController = require("./app/auth/auth.controller"); // Import auth controller
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3001',  // URL frontend Anda
+  credentials: true  // Jika perlu mengirim cookies
+}));
 
 // Middleware untuk log request
 app.use(logger("dev"));
@@ -23,18 +30,17 @@ app.use(cookieParser());
 // Middleware untuk file statis (jika ada)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Auth routes - Menambahkan route untuk autentikasi
+app.use("/", authController); // This will handle the /login endpoint
+
 // Gunakan category controller untuk API kategori
-app.use("/api", categoryController); // Menambahkan route untuk category
+app.use("/api", categoryController);
 
 // Gunakan item controller untuk API item
 app.use("/api", itemController);
 
-
 // Gunakan employee controller untuk API employee
 app.use("/api", employeeController);
-
-
-
 
 // Koneksi ke MongoDB
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
