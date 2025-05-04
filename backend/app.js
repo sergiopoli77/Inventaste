@@ -5,6 +5,8 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const { mongoUrl } = require("./config"); // Mengimpor mongoUrl dari config
 const employeeController = require("./app/employees/employee.controller");
+const itemController = require("./app/items/item.controller");
+const categoryController = require("./app/categories/category.controller"); // Mengimpor category controller
 
 const app = express();
 
@@ -21,8 +23,18 @@ app.use(cookieParser());
 // Middleware untuk file statis (jika ada)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Gunakan category controller untuk API kategori
+app.use("/api", categoryController); // Menambahkan route untuk category
+
+// Gunakan item controller untuk API item
+app.use("/api", itemController);
+
+
 // Gunakan employee controller untuk API employee
 app.use("/api", employeeController);
+
+
+
 
 // Koneksi ke MongoDB
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
