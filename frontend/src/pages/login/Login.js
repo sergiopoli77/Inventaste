@@ -52,7 +52,7 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -63,22 +63,39 @@ const Login = () => {
       return;
     }
     
-    // Mock authentication - replace with your actual auth logic
-    setTimeout(() => {
-      // For demo purposes:
-      // In a real application, you would verify credentials with your backend
-      console.log("Login attempt:", formData);
+    try {
+      // Call backend API for authentication
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password
+        }),
+      });
       
-      // Store authentication state
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("userName", formData.username);
-     
-      // Use React Router navigation instead of window.location
-      // This ensures proper handling within the React application
-      navigate("/dashboard", { replace: true });
+      const data = await response.json();
       
+      if (data.status === "success") {
+        // Store authentication state and token
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("userName", formData.username);
+        localStorage.setItem("token", data.token);
+        
+        // Navigate to dashboard on successful login
+        navigate("/dashboard", { replace: true });
+      } else {
+        // Handle login failure
+        setError(data.message || "Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Unable to connect to the server. Please try again later.");
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (

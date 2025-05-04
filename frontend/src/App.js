@@ -7,13 +7,14 @@ import Service from "./pages/service/Service";
 import "./assets/styles/App.css";
 import Gap from "./components/Gap";
 import Login from "./pages/login/Login";
+import { isAuthenticated } from "./utils/auth";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const authenticated = isAuthenticated();
   const location = useLocation();
 
-  if (!isAuthenticated) {
+  if (!authenticated) {
     // Redirect to login page if not authenticated
     return <Navigate to="/" state={{ from: location }} replace />;
   }
@@ -24,25 +25,13 @@ const ProtectedRoute = ({ children }) => {
 // Layout component that conditionally renders the header
 const AppLayout = ({ children }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const isLoginPage = location.pathname === "/";
   
-  const handleLogout = () => {
-    // Clear authentication state
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userName");
-    // You might want to keep "rememberUser" preference
-    
-    // Navigate to login page with replace to prevent going back
-    navigate("/", { replace: true });
-  };
-
   return (
     <div className="app">
       {!isLoginPage && (
         <HeaderNavigation 
-          userName={localStorage.getItem("userName") || "User"} 
-          onLogout={handleLogout} 
+          userName={localStorage.getItem("userName") || "User"}
         />
       )}
       <main className="content-wrapper">
