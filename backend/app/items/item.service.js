@@ -9,6 +9,10 @@ const getItems = async () => {
 const getItem = async (id) => {
   return await itemRepository.getItemById(id);  // Memanggil repository untuk mengambil item berdasarkan ID
 };
+// Mengambil item berdasarkan kategori
+const getItemsByCategory = async (categoryId) => {
+  return await itemRepository.getItemsByCategory(categoryId);
+};
 
 // Menambahkan item baru
 const addItem = async (itemData) => {
@@ -28,6 +32,7 @@ const removeItem = async (id) => {
 module.exports = {
   getItems,
   getItem,
+  getItemsByCategory,
   addItem,
   modifyItem,
   removeItem

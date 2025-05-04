@@ -8,6 +8,10 @@ const getItemById = async (id) => {
   return await Item.findById(id).populate('id_kategori createdBy updateBy');
 };
 
+const getItemsByCategory = async (categoryId) => {
+  return await Item.find({ id_kategori: categoryId }).populate('id_kategori createdBy updateBy');
+};
+
 const createItem = async (itemData) => {
   const newItem = new Item(itemData);
   return await newItem.save();
@@ -24,6 +28,7 @@ const deleteItem = async (id) => {
 module.exports = {
   getAllItems,
   getItemById,
+  getItemsByCategory,
   createItem,
   updateItem,
   deleteItem

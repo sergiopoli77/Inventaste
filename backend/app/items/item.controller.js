@@ -36,6 +36,22 @@ router.get("/items/:id", async (req, res) => {
   }
 });
 
+// GET item by category
+router.get("/items/category/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const items = await itemService.getItemsByCategory(categoryId);
+
+    res.json({
+      status: "success",
+      message: "List of items by category",
+      data: items,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // POST item baru
 router.post("/items", async (req, res) => {
   const { name, stock, status, id_kategori, createdBy, updateBy } = req.body;
