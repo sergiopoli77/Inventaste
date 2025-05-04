@@ -7,6 +7,9 @@ const { mongoUrl } = require("./config"); // Mengimpor mongoUrl dari config
 const employeeController = require("./app/employees/employee.controller");
 const itemController = require("./app/items/item.controller");
 const categoryController = require("./app/categories/category.controller"); // Mengimpor category controller
+const inventoryTransactionController = require("./app/inventoryTransactions/inventoryTransaction.controller"); // Mengimpor controller untuk transaksi
+const authController = require("./app/auth/auth.controller");
+const authMiddleware = require("./middlewares/authMiddleware");
 
 const app = express();
 
@@ -29,9 +32,17 @@ app.use("/api", categoryController); // Menambahkan route untuk category
 // Gunakan item controller untuk API item
 app.use("/api", itemController);
 
-
 // Gunakan employee controller untuk API employee
 app.use("/api", employeeController);
+
+// Gunakan inventory transaction controller untuk API transaksi inventaris
+app.use("/api", inventoryTransactionController);
+
+//JWT Authentication 
+app.use("/api/auth", authController);
+
+// Middleware untuk autentikasi JWT
+app.use("/api/items", authMiddleware, itemController); // Semua akses item harus login
 
 
 
