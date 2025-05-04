@@ -7,6 +7,7 @@ const { mongoUrl } = require("./config"); // Mengimpor mongoUrl dari config
 const employeeController = require("./app/employees/employee.controller");
 const itemController = require("./app/items/item.controller");
 const categoryController = require("./app/categories/category.controller"); // Mengimpor category controller
+const inventoryTransactionController = require("./app/inventoryTransactions/inventoryTransaction.controller"); // Mengimpor controller untuk transaksi
 
 const app = express();
 
@@ -29,9 +30,11 @@ app.use("/api", categoryController); // Menambahkan route untuk category
 // Gunakan item controller untuk API item
 app.use("/api", itemController);
 
-
 // Gunakan employee controller untuk API employee
 app.use("/api", employeeController);
+
+// Gunakan inventory transaction controller untuk API transaksi inventaris
+app.use("/api", inventoryTransactionController);
 
 
 
