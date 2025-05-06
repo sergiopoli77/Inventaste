@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAllCategories } = require("./category.service");
+const { getAllCategories, getCategoryByName } = require("./category.service"); // Tambahkan getCategoryByName
 
 // GET semua kategori
 router.get("/categories", async (req, res) => {

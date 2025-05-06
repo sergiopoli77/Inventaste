@@ -1,5 +1,4 @@
-const { findAllCategories } = require("./category.repository");
-
+const { findAllCategories, findCategoryByName } = require("./category.repository");
 const getAllCategories = async () => {
   try {
     const categories = await findAllCategories();
