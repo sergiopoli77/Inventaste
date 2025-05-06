@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/styles/Kitchen.css";
 import { FaSearch, FaPlus, FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown, FaFilter, FaStickyNote } from "react-icons/fa";
-import { authFetch } from "../../utils/auth";
+import { authFetch, isAdmin } from "../../utils/auth";
 
 const Kitchen = () => {
   // State for kitchen items and UI
@@ -30,6 +30,14 @@ const Kitchen = () => {
 
   // Get kitchen category ID from database
   const [kitchenCategoryId, setKitchenCategoryId] = useState(null);
+  
+  // Check if current user is admin
+  const [userIsAdmin, setUserIsAdmin] = useState(false);
+
+  // Set admin status when component mounts
+  useEffect(() => {
+    setUserIsAdmin(isAdmin());
+  }, []);
 
   // Fetch current user information
   useEffect(() => {
@@ -384,7 +392,16 @@ const Kitchen = () => {
     <div className="kitchen-page">
       <div className="page-header">
         <h1>Kitchen Inventory Management</h1>
-        <p className="page-subtitle">Manage your kitchen equipment, tools, and supplies</p>
+        <p className="page-subtitle">
+          {userIsAdmin 
+            ? "Manage your kitchen equipment, tools, and supplies" 
+            : "View kitchen equipment, tools, and supplies"}
+        </p>
+        {!userIsAdmin && (
+          <div className="staff-notice">
+            <p>You are logged in as staff. You can view items but cannot make changes.</p>
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -418,9 +435,11 @@ const Kitchen = () => {
               </button>
             </div>
 
-            <button className="add-button" onClick={handleAddItem}>
-              <FaPlus /> Add New Item
-            </button>
+            {userIsAdmin && (
+              <button className="add-button" onClick={handleAddItem}>
+                <FaPlus /> Add New Item
+              </button>
+            )}
           </div>
 
           {showFilters && (
@@ -485,7 +504,7 @@ const Kitchen = () => {
                     Status {getSortIcon("status")}
                   </th>
                   <th>Notes</th>
-                  <th>Actions</th>
+                  {userIsAdmin && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -514,19 +533,21 @@ const Kitchen = () => {
                           <span className="no-notes">-</span>
                         )}
                       </td>
-                      <td className="action-buttons">
-                        <button className="edit-button" onClick={() => handleEditItem(item._id)} title="Edit Item">
-                          <FaEdit />
-                        </button>
-                        <button className="delete-button" onClick={() => handleDeleteItem(item._id)} title="Delete Item">
-                          <FaTrash />
-                        </button>
-                      </td>
+                      {userIsAdmin && (
+                        <td className="action-buttons">
+                          <button className="edit-button" onClick={() => handleEditItem(item._id)} title="Edit Item">
+                            <FaEdit />
+                          </button>
+                          <button className="delete-button" onClick={() => handleDeleteItem(item._id)} title="Delete Item">
+                            <FaTrash />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="no-results">
+                    <td colSpan={userIsAdmin ? "7" : "6"} className="no-results">
                       No items found matching your search criteria
                     </td>
                   </tr>
@@ -535,8 +556,8 @@ const Kitchen = () => {
             </table>
           </div>
 
-          {/* Add/Edit Item Modal */}
-          {showModal && (
+          {/* Add/Edit Item Modal - Only shown for admin users */}
+          {showModal && userIsAdmin && (
             <div className="modal-overlay">
               <div className="modal-content">
                 <h2>{currentItem ? "Edit" : "Add"} Kitchen Item</h2>
@@ -592,7 +613,7 @@ const Kitchen = () => {
             </div>
           )}
 
-          {/* Notes Modal */}
+          {/* Notes Modal - Available to both admin and staff */}
           {showNoteModal && selectedNote && (
             <div className="modal-overlay">
               <div className="modal-content note-modal">

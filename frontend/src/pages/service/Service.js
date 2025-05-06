@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../../assets/styles/Service.css";
+import "../../assets/styles/Service.css"; // Assuming you have a similar CSS file
 import { FaSearch, FaPlus, FaEdit, FaTrash, FaSort, FaSortUp, FaSortDown, FaFilter, FaStickyNote } from "react-icons/fa";
-import { authFetch } from "../../utils/auth";
+import { authFetch, isAdmin} from "../../utils/auth";
 
 const Service = () => {
   // State for service items and UI
@@ -27,9 +27,22 @@ const Service = () => {
 
   // Add user state - we'll need this for createdBy/updateBy
   const [currentUser, setCurrentUser] = useState(null);
+  // State to check if user is admin
+  const [userIsAdmin, setUserIsAdmin] = useState(false);
 
   // Get service category ID from database
   const [serviceCategoryId, setServiceCategoryId] = useState(null);
+
+  // Check if user is admin using auth utility
+  useEffect(() => {
+    const checkAdminStatus = () => {
+      const adminStatus = isAdmin();
+      setUserIsAdmin(adminStatus);
+      console.log("User is admin:", adminStatus);
+    };
+
+    checkAdminStatus();
+  }, []);
 
   // Fetch current user information
   useEffect(() => {
@@ -384,7 +397,15 @@ const Service = () => {
     <div className="service-page">
       <div className="page-header">
         <h1>Service Inventory Management</h1>
-        <p className="page-subtitle">Manage your front-of-house equipment, tableware, and supplies</p>
+        <p className="page-subtitle">{userIsAdmin 
+            ? "Manage your service items, equipment, and supplies" 
+            : "View service items, equipment, and supplies"}
+        </p>
+        {!userIsAdmin && (
+          <div className="staff-notice">
+            <p>You are logged in as staff. You can view items but cannot make changes.</p>
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -418,9 +439,11 @@ const Service = () => {
               </button>
             </div>
 
-            <button className="add-button" onClick={handleAddItem}>
-              <FaPlus /> Add New Item
-            </button>
+            {userIsAdmin && (
+              <button className="add-button" onClick={handleAddItem}>
+                <FaPlus /> Add New Item
+              </button>
+            )}
           </div>
 
           {showFilters && (
@@ -485,7 +508,7 @@ const Service = () => {
                     Status {getSortIcon("status")}
                   </th>
                   <th>Notes</th>
-                  <th>Actions</th>
+                  {userIsAdmin && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -514,19 +537,21 @@ const Service = () => {
                           <span className="no-notes">-</span>
                         )}
                       </td>
-                      <td className="action-buttons">
-                        <button className="edit-button" onClick={() => handleEditItem(item._id)} title="Edit Item">
-                          <FaEdit />
-                        </button>
-                        <button className="delete-button" onClick={() => handleDeleteItem(item._id)} title="Delete Item">
-                          <FaTrash />
-                        </button>
-                      </td>
+                      {userIsAdmin && (
+                        <td className="action-buttons">
+                          <button className="edit-button" onClick={() => handleEditItem(item._id)} title="Edit Item">
+                            <FaEdit />
+                          </button>
+                          <button className="delete-button" onClick={() => handleDeleteItem(item._id)} title="Delete Item">
+                            <FaTrash />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="no-results">
+                    <td colSpan={userIsAdmin ? "7" : "6"} className="no-results">
                       No items found matching your search criteria
                     </td>
                   </tr>
@@ -535,8 +560,8 @@ const Service = () => {
             </table>
           </div>
 
-          {/* Add/Edit Item Modal */}
-          {showModal && (
+          {/* Add/Edit Item Modal - Only shown for admin users */}
+          {showModal && userIsAdmin && (
             <div className="modal-overlay">
               <div className="modal-content">
                 <h2>{currentItem ? "Edit" : "Add"} Service Item</h2>

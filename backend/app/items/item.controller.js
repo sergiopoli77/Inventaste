@@ -1,9 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const itemService = require("./item.service");
+const { isAdmin, isAuthenticated } = require("../middleware/authRoles");
+const jwt = require("jsonwebtoken");
 
-// GET semua item
-router.get("/items", async (req, res) => {
+// Auth middleware to verify token 
+// (this is moved from auth.controller.js to be used here)
+const authMiddleware = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ status: "fail", message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secretkey");
+    
+    // Add decoded user info to the request object
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ status: "fail", message: "Invalid token" });
+  }
+};
+
+// GET semua item - Accessible to both admin and staff
+router.get("/items", authMiddleware, isAuthenticated, async (req, res) => {
   try {
     const items = await itemService.getItems();
     res.json({
@@ -16,8 +38,8 @@ router.get("/items", async (req, res) => {
   }
 });
 
-// GET item by ID
-router.get("/items/:id", async (req, res) => {
+// GET item by ID - Accessible to both admin and staff
+router.get("/items/:id", authMiddleware, isAuthenticated, async (req, res) => {
   try {
     const id = req.params.id;
     const item = await itemService.getItem(id);
@@ -36,8 +58,8 @@ router.get("/items/:id", async (req, res) => {
   }
 });
 
-// GET item by category
-router.get("/items/category/:categoryId", async (req, res) => {
+// GET item by category - Accessible to both admin and staff
+router.get("/items/category/:categoryId", authMiddleware, isAuthenticated, async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
     const items = await itemService.getItemsByCategory(categoryId);
@@ -52,17 +74,19 @@ router.get("/items/category/:categoryId", async (req, res) => {
   }
 });
 
-// POST item baru
-router.post("/items", async (req, res) => {
-  const { name, stock, status, id_kategori, createdBy, updateBy } = req.body;
+// POST item baru - Admin only
+router.post("/items", authMiddleware, isAdmin, async (req, res) => {
+  const { name, stock, status, id_kategori, notes } = req.body;
   try {
+    // Set createdBy and updateBy to the current user's ID
     const newItem = await itemService.addItem({
       name,
       stock,
       status,
       id_kategori,
-      createdBy,
-      updateBy,
+      notes,
+      createdBy: req.user.id,
+      updateBy: req.user.id,
     });
 
     res.status(201).json({
@@ -75,17 +99,18 @@ router.post("/items", async (req, res) => {
   }
 });
 
-// PUT update item
-router.put("/items/:id", async (req, res) => {
+// PUT update item - Admin only
+router.put("/items/:id", authMiddleware, isAdmin, async (req, res) => {
   const { id } = req.params;
-  const { name, stock, status, id_kategori, updateBy } = req.body;
+  const { name, stock, status, id_kategori, notes } = req.body;
   try {
     const updatedItem = await itemService.modifyItem(id, {
       name,
       stock,
       status,
       id_kategori,
-      updateBy,
+      notes,
+      updateBy: req.user.id, // Set updateBy to current user's ID
     });
 
     if (!updatedItem) {
@@ -102,8 +127,8 @@ router.put("/items/:id", async (req, res) => {
   }
 });
 
-// DELETE item
-router.delete("/items/:id", async (req, res) => {
+// DELETE item - Admin only
+router.delete("/items/:id", authMiddleware, isAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const deletedItem = await itemService.removeItem(id);

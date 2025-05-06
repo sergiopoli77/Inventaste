@@ -14,8 +14,12 @@ const itemSchema = mongoose.Schema(
     },
     status: { 
       type: String, 
-      enum: ["aktif", "non-aktif"], 
+      enum: ["aktif", "low-stock", "non-aktif"], // Added low-stock status
       default: "aktif" 
+    },
+    notes: {
+      type: String,
+      required: false
     },
     id_kategori: { 
       type: mongoose.Schema.Types.ObjectId, 
