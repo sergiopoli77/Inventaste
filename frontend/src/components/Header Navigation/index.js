@@ -11,6 +11,10 @@ const HeaderNavigation = ({ userName, onLogout }) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
+  const handleDropdownItemClick = () => {
+    setActiveDropdown(null);
+  };
+
   return (
     <header className="header-navigation">
       <div className="nav-container">
@@ -36,8 +40,8 @@ const HeaderNavigation = ({ userName, onLogout }) => {
               <span className="dropdown-arrow">▼</span>
             </button>
             <div className={`dropdown-content ${activeDropdown === 'inventory' ? 'show' : ''}`}>
-              <Link to="/kitchen">Kitchen Management</Link>
-              <Link to="/service">Service Items</Link>
+              <Link to="/kitchen" onClick={handleDropdownItemClick}>Kitchen Management</Link>
+              <Link to="/service"onClick={handleDropdownItemClick}>Service Items</Link>
             </div>
           </div>
         </div>
