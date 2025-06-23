@@ -30,6 +30,12 @@ const itemSchema = mongoose.Schema(
     updateBy: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: "Employee" 
+    },
+    calories: {
+      type: Number,
+      required: false,
+      default: 0,
+      description: "Jumlah kalori dalam item makanan"
     }
   },
   {
